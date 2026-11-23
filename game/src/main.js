@@ -68,6 +68,7 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.domElement.id = 'gameCanvas'; // Set ID to match CSS
   document.body.appendChild(renderer.domElement);
   ctx.renderer = renderer;
   

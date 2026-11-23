@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Debug Test</title>
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+    .error { color: #f00; }
+    .ok { color: #0f0; }
+  </style>
+</head>
+<body>
+  <h1>Module Loading Test</h1>
+  <div id="log"></div>
+  
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.min.js"
+    }
+  }
+  </script>
+  
+  <script type="module">
+    const log = document.getElementById('log');
+    
+    function addLog(msg, isError = false) {
+      const div = document.createElement('div');
+      div.className = isError ? 'error' : 'ok';
+      div.textContent = msg;
+      log.appendChild(div);
+    }
+    
+    addLog('Starting module load test...');
+    
+    try {
+      // Test 1: Import THREE
+      const THREE = await import('three');
+      addLog('✓ THREE imported: ' + THREE.REVISION);
+      
+      // Test 2: Import config
+      const config = await import('./src/config.js');
+      addLog('✓ config.js loaded');
+      
+      // Test 3: Import main modules
+      const city = await import('./src/city.js');
+      addLog('✓ city.js loaded');
+      
+      const input = await import('./src/input.js');
+      addLog('✓ input.js loaded');
+      
+      // Test 4: Create scene
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(400, 300);
+      document.body.appendChild(renderer.domElement);
+      
+      addLog('✓ Scene, camera, renderer created');
+      
+      // Test 5: Simple render
+      scene.background = new THREE.Color(0x0000ff);
+      const geo = new THREE.BoxGeometry(1, 1, 1);
+      const mat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const cube = new THREE.Mesh(geo, mat);
+      scene.add(cube);
+      
+      camera.position.z = 3;
+      renderer.render(scene, camera);
+      
+      addLog('✓ Test render successful - should see blue+red above');
+      
+    } catch (error) {
+      addLog('✗ ERROR: ' + error.message, true);
+      addLog('Stack: ' + error.stack, true);
+    }
+  </script>
+</body>
+</html>
