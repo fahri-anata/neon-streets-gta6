@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Three.js Load Test</title>
+</head>
+<body>
+  <h1>Three.js Module Test</h1>
+  <div id="status">Loading...</div>
+  
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.min.js"
+    }
+  }
+  </script>
+  
+  <script type="module">
+    import * as THREE from 'three';
+    
+    const status = document.getElementById('status');
+    
+    if (typeof THREE !== 'undefined') {
+      status.innerHTML = '✅ THREE.js loaded successfully!<br>';
+      status.innerHTML += 'THREE.REVISION: ' + THREE.REVISION + '<br>';
+      status.innerHTML += 'typeof THREE.Scene: ' + typeof THREE.Scene;
+      status.style.color = 'green';
+      
+      console.log('THREE loaded:', THREE);
+    } else {
+      status.innerHTML = '❌ THREE.js failed to load';
+      status.style.color = 'red';
+    }
+  </script>
+</body>
+</html>

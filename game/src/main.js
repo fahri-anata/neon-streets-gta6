@@ -98,6 +98,7 @@ function init() {
   // Position player in city center
   player.x = 0;
   player.z = 0;
+  player.y = PLAYER.height;
   
   // Create player mesh
   const playerGeo = new THREE.CapsuleGeometry(0.4, 1.4, 4, 8);
@@ -105,6 +106,10 @@ function init() {
   player.mesh = new THREE.Mesh(playerGeo, playerMat);
   player.mesh.castShadow = true;
   scene.add(player.mesh);
+  
+  // Position camera for good initial view
+  camera.position.set(0, 10, 15);
+  camera.lookAt(0, 0, 0);
   
   // Window resize
   window.addEventListener('resize', onResize);
