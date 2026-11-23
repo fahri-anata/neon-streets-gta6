@@ -108,6 +108,11 @@ export function pointInRect(px, pz, rect) {
 }
 
 export function circleRectCollision(cx, cz, radius, rect) {
+  // Safety check
+  if (!rect || !rect.corners) {
+    return null;
+  }
+  
   // Quick AABB check first
   if (cx + radius < rect.minX || cx - radius > rect.maxX ||
       cz + radius < rect.minZ || cz - radius > rect.maxZ) {
