@@ -111,6 +111,12 @@ function init() {
   camera.position.set(0, 10, 15);
   camera.lookAt(0, 0, 0);
   
+  // Debug: test render immediately
+  renderer.render(scene, camera);
+  console.log('Scene children count:', scene.children.length);
+  console.log('Camera position:', camera.position);
+  console.log('Renderer size:', renderer.getSize(new THREE.Vector2()));
+  
   // Window resize
   window.addEventListener('resize', onResize);
   
