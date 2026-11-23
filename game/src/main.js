@@ -63,6 +63,7 @@ function init() {
   
   // Setup Three.js
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87ceeb); // Simple sky blue - verified working
   ctx.scene = scene;
   window.DEBUG_SCENE = scene; // Expose for debugging
   
