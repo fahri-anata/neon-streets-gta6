@@ -59,7 +59,6 @@ function init() {
   
   // Setup Three.js
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87ceeb); // Sky blue background
   ctx.scene = scene;
   
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
@@ -108,23 +107,9 @@ function init() {
   player.mesh.castShadow = true;
   scene.add(player.mesh);
   
-  // Position camera for good initial view
-  camera.position.set(0, 10, 15);
+  // Position camera for city overview - TPP aerial view
+  camera.position.set(50, 60, 80);
   camera.lookAt(0, 0, 0);
-  
-  // Debug: test render immediately
-  renderer.render(scene, camera);
-  console.log('Scene children count:', scene.children.length);
-  console.log('Camera position:', camera.position);
-  console.log('Renderer size:', renderer.getSize(new THREE.Vector2()));
-  
-  // Add simple test cube to verify rendering
-  const testGeo = new THREE.BoxGeometry(5, 5, 5);
-  const testMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
-  const testCube = new THREE.Mesh(testGeo, testMat);
-  testCube.position.set(0, 5, 0);
-  scene.add(testCube);
-  console.log('Added red test cube at (0, 5, 0)');
   
   // Window resize
   window.addEventListener('resize', onResize);

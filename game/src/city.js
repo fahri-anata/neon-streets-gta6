@@ -69,8 +69,8 @@ export function buildCity(ctx) {
       varying vec3 vWorldPosition;
       void main() {
         float h = normalize(vWorldPosition).y;
-        vec3 topColor = vec3(0.05, 0.05, 0.15);  // dark blue top
-        vec3 horizonColor = vec3(0.8, 0.4, 0.3); // orange horizon
+        vec3 topColor = vec3(0.1, 0.3, 0.6);     // bright sky blue
+        vec3 horizonColor = vec3(0.5, 0.7, 0.9); // light cyan horizon
         vec3 color = mix(horizonColor, topColor, max(h, 0.0));
         gl_FragColor = vec4(color, 1.0);
       }
