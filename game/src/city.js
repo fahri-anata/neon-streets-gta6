@@ -49,12 +49,29 @@ export function buildCity(ctx) {
   sun.shadow.camera.far = 400;
   scene.add(sun);
   
-  // Sky
+  // Sky with gradient
   const skyGeo = new THREE.SphereGeometry(400, 32, 32);
-  const skyMat = new THREE.MeshBasicMaterial({ 
-    color: COLORS.sky, 
+  const skyMat = new THREE.ShaderMaterial({
     side: THREE.BackSide,
-    fog: false 
+    fog: false,
+    vertexShader: `
+      varying vec3 vWorldPosition;
+      void main() {
+        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = worldPosition.xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vWorldPosition;
+      void main() {
+        float h = normalize(vWorldPosition).y;
+        vec3 topColor = vec3(0.05, 0.05, 0.15);  // dark blue top
+        vec3 horizonColor = vec3(0.8, 0.4, 0.3); // orange horizon
+        vec3 color = mix(horizonColor, topColor, max(h, 0.0));
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `
   });
   const sky = new THREE.Mesh(skyGeo, skyMat);
   scene.add(sky);

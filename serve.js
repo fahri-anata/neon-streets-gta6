@@ -6,7 +6,8 @@ const PORT = 8080;
 
 const mimeTypes = {
   '.html': 'text/html',
-  '.js': 'text/javascript',
+  '.js': 'application/javascript',
+  '.mjs': 'application/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
 };
