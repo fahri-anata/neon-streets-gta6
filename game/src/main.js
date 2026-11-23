@@ -196,17 +196,17 @@ function update(dt) {
     updatePlayerControls(dt);
   }
   
-  // Vehicle physics
-  ctx.vehicles.update(dt, ctx);
+  // Vehicle physics - TEMPORARILY DISABLED FOR DEBUGGING
+  // ctx.vehicles.update(dt, ctx);
   
-  // Police
-  ctx.police.update(dt, player);
+  // Police - TEMPORARILY DISABLED FOR DEBUGGING
+  // ctx.police.update(dt, player);
   
-  // Traffic
-  ctx.traffic.update(dt, player);
+  // Traffic - TEMPORARILY DISABLED FOR DEBUGGING
+  // ctx.traffic.update(dt, player);
   
-  // Pedestrians
-  ctx.pedestrians.update(dt, player);
+  // Pedestrians - TEMPORARILY DISABLED FOR DEBUGGING
+  // ctx.pedestrians.update(dt, player);
   
   // Camera
   updateCamera();
@@ -214,9 +214,9 @@ function update(dt) {
   // HUD
   updateHUD();
   
-  // Minimap
-  if (ctx.minimap) {
-    ctx.minimap.render(player, ctx.vehicles, ctx.city);
+  // Minimap - TEMPORARILY DISABLED FOR DEBUGGING
+  // if (ctx.minimap) {
+  //   ctx.minimap.render(player, ctx.vehicles, ctx.city);
   }
   
   // City
