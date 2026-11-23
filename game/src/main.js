@@ -15,6 +15,9 @@ let scene, camera, renderer;
 let gameState = 'menu';
 let isPaused = false;
 
+// Debug: expose to window for verification
+window.DEBUG_MODULE_LOADED = true;
+
 const player = {
   x: 0,
   y: PLAYER.height,
@@ -55,7 +58,8 @@ function createEventEmitter() {
 }
 
 function init() {
-  console.log('Initializing Neon Streets...');
+  console.log('🎮 Initializing Neon Streets...');
+  window.DEBUG_INIT_CALLED = true;
   
   // Setup Three.js
   scene = new THREE.Scene();
