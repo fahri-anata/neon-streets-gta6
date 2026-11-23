@@ -217,7 +217,7 @@ function update(dt) {
   // Minimap - TEMPORARILY DISABLED FOR DEBUGGING
   // if (ctx.minimap) {
   //   ctx.minimap.render(player, ctx.vehicles, ctx.city);
-  }
+  // }
   
   // City
   ctx.city.update(dt);
