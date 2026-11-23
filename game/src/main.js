@@ -437,4 +437,9 @@ window.game = {
 };
 
 // Initialize on load
-window.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', init);
+} else {
+  // DOM already loaded, call init immediately
+  init();
+}

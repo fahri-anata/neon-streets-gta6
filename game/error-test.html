@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Module Error Test</title>
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+    .error { color: #f00; white-space: pre-wrap; }
+    .ok { color: #0f0; }
+  </style>
+</head>
+<body>
+  <h1>Detailed Module Error Test</h1>
+  <div id="log"></div>
+  
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.min.js"
+    }
+  }
+  </script>
+  
+  <script type="module">
+    const log = document.getElementById('log');
+    
+    function addLog(msg, isError = false) {
+      const div = document.createElement('div');
+      div.className = isError ? 'error' : 'ok';
+      div.textContent = msg;
+      log.appendChild(div);
+    }
+    
+    // Catch ALL errors
+    window.addEventListener('error', (e) => {
+      addLog('GLOBAL ERROR: ' + e.message + '\n' + e.filename + ':' + e.lineno, true);
+    });
+    
+    window.addEventListener('unhandledrejection', (e) => {
+      addLog('UNHANDLED PROMISE: ' + e.reason, true);
+    });
+    
+    addLog('Starting import test...');
+    
+    try {
+      addLog('1. Importing main.js...');
+      const main = await import('./src/main.js');
+      addLog('✓ main.js imported successfully!');
+      
+      // Check if init ran
+      setTimeout(() => {
+        const sceneExists = window.scene !== undefined;
+        const rendererExists = window.renderer !== undefined;
+        addLog(`Scene exists: ${sceneExists}`);
+        addLog(`Renderer exists: ${rendererExists}`);
+      }, 1000);
+      
+    } catch (error) {
+      addLog('✗ IMPORT FAILED:', true);
+      addLog('Error: ' + error.message, true);
+      addLog('Stack: ' + error.stack, true);
+    }
+  </script>
+</body>
+</html>
