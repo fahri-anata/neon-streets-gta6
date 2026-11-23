@@ -67,7 +67,8 @@ export function createMinimap(ctx) {
       
       // Draw vehicles
       mapCtx.fillStyle = '#ff9900';
-      vehicles.vehicles.forEach(veh => {
+      if (vehicles && vehicles.vehicles) {
+        vehicles.vehicles.forEach(veh => {
         if (veh.role === 'police') {
           mapCtx.fillStyle = '#0066ff';
         } else {
@@ -83,6 +84,7 @@ export function createMinimap(ctx) {
           mapCtx.fill();
         }
       });
+      }
       
       // Draw player
       mapCtx.save();
