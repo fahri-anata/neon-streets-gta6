@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Working Test</title>
+  <style>
+    body { margin: 0; background: #000; }
+    canvas { display: block; }
+    #info { position: absolute; top: 10px; left: 10px; color: #0f0; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <div id="info">Loading...</div>
+  
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.min.js"
+    }
+  }
+  </script>
+  
+  <script type="module">
+    import * as THREE from 'three';
+    
+    const info = document.getElementById('info');
+    info.textContent = 'THREE loaded: ' + THREE.REVISION;
+    
+    // Create scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87ceeb); // Sky blue
+    
+    // Camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(10, 10, 10);
+    camera.lookAt(0, 0, 0);
+    
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    
+    // Add ground
+    const groundGeo = new THREE.PlaneGeometry(50, 50);
+    const groundMat = new THREE.MeshBasicMaterial({ color: 0x228822, side: THREE.DoubleSide });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    scene.add(ground);
+    
+    // Add some buildings
+    for (let i = 0; i < 5; i++) {
+      const height = 5 + Math.random() * 10;
+      const geo = new THREE.BoxGeometry(3, height, 3);
+      const mat = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
+      const building = new THREE.Mesh(geo, mat);
+      building.position.set(
+        (Math.random() - 0.5) * 30,
+        height / 2,
+        (Math.random() - 0.5) * 30
+      );
+      scene.add(building);
+    }
+    
+    // Render
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    info.textContent += ' | Scene children: ' + scene.children.length + ' | RENDERING!';
+    
+    console.log('Simple test working!');
+  </script>
+</body>
+</html>
