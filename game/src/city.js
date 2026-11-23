@@ -30,6 +30,9 @@ export function buildCity(ctx) {
   // Build roads
   buildRoads(root, network, rng);
   
+  // Build street lights
+  buildStreetLights(root, network, scene);
+  
   // Build city blocks with buildings
   buildBlocks(root, network, colliders, rng);
   
@@ -197,6 +200,57 @@ function buildRoads(root, network, rng) {
   });
 }
 
+function buildStreetLights(root, network, scene) {
+  const spacing = 25; // meters between lights
+  
+  network.edges.forEach(edge => {
+    const from = network.nodes[edge.from];
+    const to = network.nodes[edge.to];
+    
+    const length = Math.abs(edge.horizontal ? (to.x - from.x) : (to.z - from.z));
+    const count = Math.floor(length / spacing);
+    
+    for (let i = 0; i <= count; i++) {
+      const t = i / count;
+      const x = from.x + (to.x - from.x) * t;
+      const z = from.z + (to.z - from.z) * t;
+      
+      // Offset to side of road
+      const offset = network.roadWidth / 2 + 1;
+      const offsetX = edge.horizontal ? 0 : offset;
+      const offsetZ = edge.horizontal ? offset : 0;
+      
+      // Build light on both sides
+      buildStreetLight(root, scene, x + offsetX, z + offsetZ);
+      buildStreetLight(root, scene, x - offsetX, z - offsetZ);
+    }
+  });
+}
+
+function buildStreetLight(root, scene, x, z) {
+  // Pole
+  const poleGeo = new THREE.CylinderGeometry(0.15, 0.15, 6, 8);
+  const poleMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+  const pole = new THREE.Mesh(poleGeo, poleMat);
+  pole.position.set(x, 3, z);
+  pole.castShadow = true;
+  root.add(pole);
+  
+  // Light bulb
+  const bulbGeo = new THREE.SphereGeometry(0.3, 8, 8);
+  const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffffaa });
+  const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+  bulb.position.set(x, 6, z);
+  root.add(bulb);
+  
+  // Point light
+  const light = new THREE.PointLight(0xffffaa, 0.8, 20);
+  light.position.set(x, 6, z);
+  light.castShadow = true;
+  light.shadow.mapSize.set(256, 256);
+  scene.add(light);
+}
+
 function buildBlocks(root, network, colliders, rng) {
   const size = network.gridSize;
   
@@ -319,8 +373,11 @@ function buildBuilding(root, x, z, width, depth, colliders, rng) {
   root.add(building);
   
   // Windows
-  const windowMat = new THREE.MeshBasicMaterial({ 
-    color: rand(rng, 0, 1) < 0.7 ? 0xffffaa : 0x000000 
+  const windowMat = new THREE.MeshStandardMaterial({ 
+    color: rand(rng, 0, 1) < 0.7 ? 0xffffdd : 0x111111,
+    emissive: rand(rng, 0, 1) < 0.7 ? 0xffff88 : 0x000000,
+    emissiveIntensity: 0.8,
+    roughness: 0.3
   });
   
   for (let f = 0; f < floors; f++) {

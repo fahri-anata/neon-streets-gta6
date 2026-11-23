@@ -8,6 +8,7 @@ import { createVehicleSystem } from './vehicles.js';
 import { createPolice } from './police.js';
 import { createTraffic } from './traffic.js';
 import { createPedestrians } from './pedestrians.js';
+import { createMinimap } from './minimap.js';
 import { clamp, dist2D, wrapAngle } from './util.js';
 
 let scene, camera, renderer;
@@ -89,6 +90,9 @@ function init() {
   
   // Pedestrians
   createPedestrians(ctx);
+  
+  // Minimap
+  createMinimap(ctx);
   
   // Position player in city center
   player.x = 0;
@@ -186,6 +190,11 @@ function update(dt) {
   
   // HUD
   updateHUD();
+  
+  // Minimap
+  if (ctx.minimap) {
+    ctx.minimap.render(player, ctx.vehicles, ctx.city);
+  }
   
   // City
   ctx.city.update(dt);
