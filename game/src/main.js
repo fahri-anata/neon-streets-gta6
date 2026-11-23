@@ -28,6 +28,7 @@ const player = {
   cash: PLAYER.startCash,
   vehicle: null,
   onGround: true,
+  mesh: null, // Player 3D model
 };
 
 const ctx = {
@@ -97,6 +98,13 @@ function init() {
   // Position player in city center
   player.x = 0;
   player.z = 0;
+  
+  // Create player mesh
+  const playerGeo = new THREE.CapsuleGeometry(0.4, 1.4, 4, 8);
+  const playerMat = new THREE.MeshStandardMaterial({ color: 0x3366ff });
+  player.mesh = new THREE.Mesh(playerGeo, playerMat);
+  player.mesh.castShadow = true;
+  scene.add(player.mesh);
   
   // Window resize
   window.addEventListener('resize', onResize);
@@ -240,6 +248,13 @@ function updatePlayerControls(dt) {
   player.y += player.vy * dt;
   player.z += player.vz * dt;
   
+  // Update player mesh
+  if (player.mesh) {
+    player.mesh.position.set(player.x, player.y - 0.5, player.z);
+    player.mesh.rotation.y = player.heading;
+    player.mesh.visible = true;
+  }
+  
   // Ground collision
   if (player.y <= PLAYER.height) {
     player.y = PLAYER.height;
@@ -281,6 +296,9 @@ function updatePlayerControls(dt) {
 function updateVehicleControls(dt) {
   const car = player.vehicle;
   if (!car) return;
+  
+  // Hide player mesh when in vehicle
+  if (player.mesh) player.mesh.visible = false;
   
   const forward = isKeyDown('KeyW') ? 1 : isKeyDown('KeyS') ? -1 : 0;
   const steer = isKeyDown('KeyD') ? 1 : isKeyDown('KeyA') ? -1 : 0;
