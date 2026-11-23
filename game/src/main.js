@@ -64,6 +64,7 @@ function init() {
   // Setup Three.js
   scene = new THREE.Scene();
   ctx.scene = scene;
+  window.DEBUG_SCENE = scene; // Expose for debugging
   
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
   ctx.camera = camera;
@@ -75,6 +76,9 @@ function init() {
   renderer.domElement.id = 'gameCanvas'; // Set ID to match CSS
   document.body.appendChild(renderer.domElement);
   ctx.renderer = renderer;
+  window.DEBUG_RENDERER = renderer; // Expose for debugging
+  
+  console.log('✅ Renderer created:', renderer.domElement.width, 'x', renderer.domElement.height);
   
   // Input
   initInput();
